@@ -50,7 +50,7 @@ public class OutputFrameController {
     private int playerOScore;
     private int roundsLeft;
     private boolean isBotFirst;
-    private Bot bot;
+    private PruneBot bot;
 
 
     private static final int ROW = 8;
@@ -77,7 +77,7 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        this.bot = new PruneBot(this.buttons, this.roundsLeft);
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -353,6 +353,7 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
+        this.bot.updateGameState(this.buttons, this.roundsLeft);
         int[] botMove = this.bot.move();
         int i = botMove[0];
         int j = botMove[1];
