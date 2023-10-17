@@ -31,16 +31,17 @@ public class Board {
         this.oScore = 4;
     }
 
-    public Board copy() {
-        Board newBoard = new Board(ROW, COL);
-        newBoard.xScore = this.xScore;
-        newBoard.oScore = this.oScore;
+    public Board(Board ref) {
+        ROW = ref.ROW;
+        COL = ref.COL;
 
+        this.data = new Tile[ROW][COL];
         for (int i = 0; i < ROW; i++) {
-            System.arraycopy(this.data[i], 0, newBoard.data[i], 0, COL);
+            System.arraycopy(ref.data[i], 0, this.data[i], 0, COL);
         }
 
-        return newBoard;
+        this.xScore = ref.xScore;
+        this.oScore = ref.oScore;
     }
 
     public void setData(int i, int j, Tile val) {
@@ -151,5 +152,18 @@ public class Board {
         System.arraycopy(ownedCells, 0, ownedCellsCopy, 0, count);
 
         return ownedCellsCopy;
+    }
+
+    public void print() {
+        System.out.println("X Score: " + this.xScore);
+        System.out.println("O Score: " + this.oScore);
+        System.out.println("Board: ");
+        for (Tile[] datum : this.data) {
+            for (Tile tile : datum) {
+                System.out.print(tile + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }
