@@ -22,11 +22,9 @@ public abstract class Bot {
 
     public float objectiveFunction(Board board){
         float main = board.oScore - board.xScore;
-//        float heur = heuristic(board);
+        float heur = heuristic(board);
 
-//        return main + heur;
-        return main;
-
+        return main + heur;
     }
 }
 

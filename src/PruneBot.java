@@ -32,6 +32,12 @@ class PruneBot extends Bot{
         return  new int[]{coor[0], coor[1]};
     }
 
+    public float objectiveFunction(Board board){
+        float main = board.oScore - board.xScore;
+
+        return main;
+    }
+
     public float[] action(Board board, int[] chosenCell, int actionsLeft, boolean botTurn, float alpha, float beta){
         if(botTurn) { board.addMove(chosenCell[0], chosenCell[1], Tile.BOT); }
         else { board.addMove(chosenCell[0], chosenCell[1], Tile.PLAYER); }
