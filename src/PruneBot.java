@@ -12,7 +12,7 @@ class PruneBot extends Bot{
         int actionsLeft = board.ROUNDS * 2;
         int[][] emptyCells = board.getEmptyCells();
         if(!board.IS_BOT_FIRST) actionsLeft--;
-        actionsLeft = Math.min(actionsLeft, 6);
+        actionsLeft = Math.min(actionsLeft, 5);
         float[] result;
 
 //        System.out.println("Initial alpha: "+max);

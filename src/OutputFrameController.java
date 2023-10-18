@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.*;
 
@@ -374,33 +375,42 @@ public class OutputFrameController{
 
     private void moveBot() {
         board.setROUNDS(this.roundsLeft);
+        int i = -1;
+        int j = -1;
+
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         ScheduledExecutorService timeOut = Executors.newScheduledThreadPool(1);
 
         Future<int[]> futureMove = executorService.submit(() ->  {
             int[] resultMove = this.bot.move(board);
-            return new int[]{0, 0};
+            return resultMove;
         });
 
         try{
             int[] botMove = futureMove.get(5, TimeUnit.SECONDS);
-            int i = botMove[0];
-            int j = botMove[1];
-
-            if (!this.buttons[i][j].getText().equals("")) {
-                new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-                System.exit(1);
-                return;
-            }
-
-            this.selectedCoordinates(i, j);
+            i = botMove[0];
+            j = botMove[1];
         } catch (InterruptedException e){
             e.printStackTrace();
         } catch (ExecutionException e){
             e.printStackTrace();
         } catch (TimeoutException e){
-            e.printStackTrace();
+            System.out.println("Fallback plan");
+            Random random = new Random();
+            int[][] validMoves = board.getValidMoves();
+            int [] randomPopulation = validMoves[random.nextInt(validMoves.length)];
+
+            i = randomPopulation[0];
+            j = randomPopulation[1];
         }
+
+        if (!this.buttons[i][j].getText().equals("")) {
+            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
+            System.exit(1);
+            return;
+        }
+
+        this.selectedCoordinates(i, j);
     }
 
 }
