@@ -1,5 +1,4 @@
 import java.util.Random;
-import java.util.Arrays;
 
 public class SidewayHCBot extends Bot{
     private Random random = new Random();
@@ -56,7 +55,7 @@ public class SidewayHCBot extends Bot{
         float val = 0;
         for (int[] cell : ownedCells) {
             val += Math.abs(
-                Math.sqrt(Math.pow(cell[0]/3.5 - 1, 2) + Math.pow(cell[1]/3.5 - 1, 2)) / 17
+                Math.sqrt(Math.pow(cell[0]/3.5 - 1, 2) + Math.pow(cell[1]/3.5 - 1, 2)) / 16
             );
         }
 
