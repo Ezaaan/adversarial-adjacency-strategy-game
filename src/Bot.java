@@ -13,19 +13,13 @@ public class Bot {
 }
 
 class PruneBot {
-    private boolean botTurn = true;
     private String[][] field = new String[8][8];
     public int nodeID = 1;
 
     //Getter
-    public boolean isBotTurn() { return this.botTurn; }
     public String[][] getField(){ return field; }
 
     //Setter
-    public void toggleBotTurn(){ botTurn = !botTurn; }
-    public void setField(int i, int j, String val){
-        field[i][j] = val;
-    }
     public void setField(String[][] newVal){
         field = newVal;
     }
@@ -35,6 +29,7 @@ class PruneBot {
         int max = -999;
         int beta = 999;
         int alpha = -999;
+        boolean botTurn = true;
 
         setField(parseField(field));
         int actionsLeft = roundsLeft * 2;
@@ -47,7 +42,7 @@ class PruneBot {
         int[] coor = new int[2];
         for (int[] cell:
                 emptyCells) {
-            result = action(getField(), cell, actionsLeft, !isBotTurn(), alpha, beta);
+            result = action(getField(), cell, actionsLeft, botTurn, alpha, beta);
             if(max < result[2]){
                 coor = cell;
                 System.out.println("Got cell: " + coor[0] + " | " + coor[1] + "\nMax: " + result[2]);
@@ -86,7 +81,7 @@ class PruneBot {
 
     public int[] action(String[][]copyField, int[] chosenCell, int actionsLeft, boolean botTurn, int alpha, int beta){
 //        System.out.println("NODE ID: " + id);
-        if(isBotTurn()) copyField = updateField(copyField, chosenCell[0], chosenCell[1], "0");
+        if(botTurn) copyField = updateField(copyField, chosenCell[0], chosenCell[1], "O");
         else copyField = updateField(copyField, chosenCell[0], chosenCell[1], "X");
         int[][] emptyCells = getEmptyCells(copyField);
         actionsLeft--;
@@ -95,18 +90,18 @@ class PruneBot {
         System.out.println("Actions left: "+actionsLeft);
         System.out.println("ChosenCell: "+chosenCell[0]+" | "+chosenCell[1]);
 
+        botTurn = !botTurn;
+
         if(actionsLeft == 0) {
             System.out.println("Leaf score: "+scoreFunction(copyField));
             return new int[]{chosenCell[0], chosenCell[1], scoreFunction(copyField)};
         }
 
-
-
         //Maximizer
         if(botTurn){
             int max = -999;
             for (int[] cell: emptyCells) {
-                int[] node = action(copyField, cell, actionsLeft, !botTurn, alpha, beta);
+                int[] node = action(copyField, cell, actionsLeft, botTurn, alpha, beta);
                 max = Math.max(node[2], max);
                 alpha = Math.max(max, alpha);
 
@@ -120,7 +115,7 @@ class PruneBot {
         //Minimizer
         int min = 999;
         for (int[] cell: emptyCells) {
-            int[] node = action(copyField, cell, actionsLeft, !botTurn, alpha, beta);
+            int[] node = action(copyField, cell, actionsLeft, botTurn, alpha, beta);
             min = Math.min(node[2], min);
             beta = Math.min(min, beta);
 
@@ -135,16 +130,16 @@ class PruneBot {
 
     public String[][] updateField(String[][] field, int i, int j, String val){
         field[i][j] = val;
-        if(i - 1 >= 0 && !field[i - 1][j].equals("")){
+        if(i - 1 >= 0 && !field[i - 1][j].equals(" ")){
             field[i - 1][j] = val;
         }
-        if(i + 1 <= 7 && !field[i + 1][j].equals("")){
+        if(i + 1 <= 7 && !field[i + 1][j].equals(" ")){
             field[i + 1][j] = val;
         }
-        if(j - 1 >= 0 && !field[i][j - 1].equals("")){
+        if(j - 1 >= 0 && !field[i][j - 1].equals(" ")){
             field[i][j - 1] = val;
         }
-        if(j + 1 <= 7 && !field[i][j + 1].equals("")){
+        if(j + 1 <= 7 && !field[i][j + 1].equals(" ")){
             field[i][j + 1] = val;
         }
         return  field;
@@ -154,7 +149,7 @@ class PruneBot {
         int count = 0;
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(field[i][j].equals("")){
+                if(field[i][j].equals(" ")){
                     count++;
                 }
             }
@@ -164,7 +159,7 @@ class PruneBot {
         count = 0;
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(field[i][j].equals("")){
+                if(field[i][j].equals(" ")){
                     listOfEmpty[count] = new int[]{i, j};
                     count++;
                 }
@@ -177,7 +172,7 @@ class PruneBot {
         String[][] parsedField = new String[8][8];
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(field[i][j].getText().equals("")) parsedField[i][j] = "";
+                if(field[i][j].getText().equals("")) parsedField[i][j] = " ";
                 else if (field[i][j].getText().equals("X")) parsedField[i][j] = "X";
                 else parsedField[i][j] = "O";
             }
