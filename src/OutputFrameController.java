@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.concurrent.*;
 
 /**
  * The OutputFrameController class.  It controls button input from the users when
@@ -22,7 +24,7 @@ import java.io.IOException;
  * @author Jedid Ahn
  *
  */
-public class OutputFrameController {
+public class OutputFrameController{
     @FXML
     private GridPane gameBoard;
 
@@ -372,16 +374,33 @@ public class OutputFrameController {
 
     private void moveBot() {
         board.setROUNDS(this.roundsLeft);
-        int[] botMove = this.bot.move(board);
-        int i = botMove[0];
-        int j = botMove[1];
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ScheduledExecutorService timeOut = Executors.newScheduledThreadPool(1);
 
-        if (!this.buttons[i][j].getText().equals("")) {
-            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-            System.exit(1);
-            return;
+        Future<int[]> futureMove = executorService.submit(() ->  {
+            int[] resultMove = this.bot.move(board);
+            return new int[]{0, 0};
+        });
+
+        try{
+            int[] botMove = futureMove.get(5, TimeUnit.SECONDS);
+            int i = botMove[0];
+            int j = botMove[1];
+
+            if (!this.buttons[i][j].getText().equals("")) {
+                new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
+                System.exit(1);
+                return;
+            }
+
+            this.selectedCoordinates(i, j);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        } catch (ExecutionException e){
+            e.printStackTrace();
+        } catch (TimeoutException e){
+            e.printStackTrace();
         }
-
-        this.selectedCoordinates(i, j);
     }
+
 }
