@@ -3,12 +3,16 @@ public class Board {
     public int xScore;
     public int oScore;
 
-    public final int ROW;
-    public final int COL;
+    public int ROW;
+    public int COL;
+    public int ROUNDS;
+    public boolean IS_BOT_FIRST;
 
-    public Board(int r, int c) {
+    public Board(int r, int c, int rounds, boolean is_bot_first) {
         ROW = r;
         COL = c;
+        ROUNDS = rounds;
+        IS_BOT_FIRST = is_bot_first;
 
         this.data = new Tile[r][c];
         for (int i = 0; i < r; i++) {
@@ -34,6 +38,23 @@ public class Board {
     public Board(Board ref) {
         ROW = ref.ROW;
         COL = ref.COL;
+        ROUNDS = ref.ROUNDS;
+        IS_BOT_FIRST = ref.IS_BOT_FIRST;
+
+        this.data = new Tile[ROW][COL];
+        for (int i = 0; i < ROW; i++) {
+            System.arraycopy(ref.data[i], 0, this.data[i], 0, COL);
+        }
+
+        this.xScore = ref.xScore;
+        this.oScore = ref.oScore;
+    }
+
+    public void copyBoard(Board ref) {
+        this.ROW = ref.ROW;
+        this.COL = ref.COL;
+        this.ROUNDS = ref.ROUNDS;
+        this.IS_BOT_FIRST = ref.IS_BOT_FIRST;
 
         this.data = new Tile[ROW][COL];
         for (int i = 0; i < ROW; i++) {
@@ -48,6 +69,7 @@ public class Board {
         this.data[i][j] = val;
     }
 
+    public void setROUNDS(int rounds) { this.ROUNDS = rounds; }
     public void addScore(int num, Tile type) {
         if (type == Tile.PLAYER) {
             xScore += num;
@@ -152,6 +174,10 @@ public class Board {
         System.arraycopy(ownedCells, 0, ownedCellsCopy, 0, count);
 
         return ownedCellsCopy;
+    }
+
+    public int[][] getEmptyCells(){
+        return getOwnedCells(Tile.EMPTY);
     }
 
     public void print() {

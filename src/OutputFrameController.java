@@ -56,7 +56,7 @@ public class OutputFrameController {
     private static final int ROW = 8;
     private static final int COL = 8;
     private Button[][] buttons = new Button[ROW][COL];
-    private Board board = new Board(ROW, COL);
+    private Board board = new Board(ROW, COL, 0, isBotFirst);
 
     /**
      * Set the name of player X (player) to be name1, set the name of player O (bot) to be name2,
@@ -88,7 +88,7 @@ public class OutputFrameController {
                 break;
             case "Minimax":
                 // this.bot = new MinimaxBot();
-                this.bot = new SidewayHCBot();
+                this.bot = new PruneBot();
                 break;
             default:
                 break;
@@ -371,6 +371,7 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
+        board.setROUNDS(this.roundsLeft);
         int[] botMove = this.bot.move(board);
         int i = botMove[0];
         int j = botMove[1];
