@@ -3,10 +3,10 @@ public class Board {
     public int xScore;
     public int oScore;
 
-    public final int ROW;
-    public final int COL;
+    public int ROW;
+    public int COL;
     public int ROUNDS;
-    public final boolean IS_BOT_FIRST;
+    public boolean IS_BOT_FIRST;
 
     public Board(int r, int c, int rounds, boolean is_bot_first) {
         ROW = r;
@@ -40,6 +40,21 @@ public class Board {
         COL = ref.COL;
         ROUNDS = ref.ROUNDS;
         IS_BOT_FIRST = ref.IS_BOT_FIRST;
+
+        this.data = new Tile[ROW][COL];
+        for (int i = 0; i < ROW; i++) {
+            System.arraycopy(ref.data[i], 0, this.data[i], 0, COL);
+        }
+
+        this.xScore = ref.xScore;
+        this.oScore = ref.oScore;
+    }
+
+    public void copyBoard(Board ref) {
+        this.ROW = ref.ROW;
+        this.COL = ref.COL;
+        this.ROUNDS = ref.ROUNDS;
+        this.IS_BOT_FIRST = ref.IS_BOT_FIRST;
 
         this.data = new Tile[ROW][COL];
         for (int i = 0; i < ROW; i++) {
