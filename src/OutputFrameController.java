@@ -80,7 +80,7 @@ public class OutputFrameController {
         switch (botType) {
             case "GeneticAlgo":
                 // this.bot = new GeneticBot();
-                this.bot = new SidewayHCBot();
+                this.bot = new GeneticBot();
                 break;
             case "SidewayHC":
                 // this.bot = new MinimaxBot();
