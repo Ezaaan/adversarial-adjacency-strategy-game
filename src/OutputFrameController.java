@@ -88,7 +88,6 @@ public class OutputFrameController {
                 break;
             case "Minimax":
                 // this.bot = new MinimaxBot();
-                System.out.println(this.roundsLeft);
                 this.bot = new PruneBot();
                 break;
             default:
