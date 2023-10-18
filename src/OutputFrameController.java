@@ -56,7 +56,7 @@ public class OutputFrameController {
     private static final int ROW = 8;
     private static final int COL = 8;
     private Button[][] buttons = new Button[ROW][COL];
-
+    private Board board = new Board(ROW, COL);
 
     /**
      * Set the name of player X (player) to be name1, set the name of player O (bot) to be name2,
@@ -69,7 +69,7 @@ public class OutputFrameController {
      * @param isBotFirst True if bot is first, false otherwise.
      *
      */
-    void getInput(String name1, String name2, String rounds, boolean isBotFirst){
+    void getInput(String name1, String name2, String rounds, boolean isBotFirst, String botType){
         this.playerXName.setText(name1);
         this.playerOName.setText(name2);
         this.roundsLeftLabel.setText(rounds);
@@ -77,7 +77,23 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        switch (botType) {
+            case "GeneticAlgo":
+                // this.bot = new GeneticBot();
+                this.bot = new GeneticBot();
+                break;
+            case "SidewayHC":
+                // this.bot = new MinimaxBot();
+                this.bot = new SidewayHCBot();
+                break;
+            case "Minimax":
+                // this.bot = new MinimaxBot();
+                this.bot = new SidewayHCBot();
+                break;
+            default:
+                break;
+        }
+
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -177,6 +193,7 @@ public class OutputFrameController {
         // Button must be blank.
         else {
             if (this.playerXTurn) {
+                board.addMove(i, j, Tile.PLAYER);
                 // Changed background color to green to indicate next player's turn.
                 this.playerXBoxPane.setStyle("-fx-background-color: WHITE; -fx-border-color: #D3D3D3;");
                 this.playerOBoxPane.setStyle("-fx-background-color: #90EE90; -fx-border-color: #D3D3D3;");
@@ -200,6 +217,7 @@ public class OutputFrameController {
                 this.moveBot();
             }
             else {
+                board.addMove(i, j, Tile.BOT);
                 this.playerXBoxPane.setStyle("-fx-background-color: #90EE90; -fx-border-color: #D3D3D3;");
                 this.playerOBoxPane.setStyle("-fx-background-color: WHITE; -fx-border-color: #D3D3D3;");
                 this.buttons[i][j].setText("O");
@@ -353,7 +371,7 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move();
+        int[] botMove = this.bot.move(board);
         int i = botMove[0];
         int j = botMove[1];
 
