@@ -154,6 +154,10 @@ public class Board {
         return ownedCellsCopy;
     }
 
+    public int[][] getEmptyCells(){
+        return getOwnedCells(Tile.EMPTY);
+    }
+
     public void print() {
         System.out.println("X Score: " + this.xScore);
         System.out.println("O Score: " + this.oScore);
