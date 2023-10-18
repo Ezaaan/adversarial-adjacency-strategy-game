@@ -5,10 +5,14 @@ public class Board {
 
     public final int ROW;
     public final int COL;
+    public final int ROUNDS;
+    public final boolean IS_BOT_FIRST;
 
-    public Board(int r, int c) {
+    public Board(int r, int c, int rounds, boolean is_bot_first) {
         ROW = r;
         COL = c;
+        ROUNDS = rounds;
+        IS_BOT_FIRST = is_bot_first;
 
         this.data = new Tile[r][c];
         for (int i = 0; i < r; i++) {
@@ -34,6 +38,8 @@ public class Board {
     public Board(Board ref) {
         ROW = ref.ROW;
         COL = ref.COL;
+        ROUNDS = ref.ROUNDS;
+        IS_BOT_FIRST = ref.IS_BOT_FIRST;
 
         this.data = new Tile[ROW][COL];
         for (int i = 0; i < ROW; i++) {
