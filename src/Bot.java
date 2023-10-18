@@ -4,12 +4,30 @@ public abstract class Bot {
     private int rounds_left;
     private MarkType[][] field;
 
-    public Bot(Button[][] field, int init_rounds){
-        updateGameState(field, init_rounds);
-    }
-    public void updateGameState(Button[][] field, int rounds_left){
-        this.field = parseField(field);
-        this.rounds_left = rounds_left;
+public abstract class Bot {
+    // public int[] move() {
+    //     // create random move
+    //     int randomX = (int) (Math.random()*8);
+    //     int randomY = (int) (Math.random()*8);
+    //     System.out.println("Ini X: " + randomX + " Ini Y: " + randomY);
+    //     return new int[]{randomY, randomX};
+    // }
+    public abstract int[] move(Board board);
+}
+
+class PruneBot {
+    private boolean botTurn = true;
+    private String[][] field = new String[8][8];
+    public int nodeID = 1;
+
+    //Getter
+    public boolean isBotTurn() { return this.botTurn; }
+    public String[][] getField(){ return field; }
+
+    //Setter
+    public void toggleBotTurn(){ botTurn = !botTurn; }
+    public void setField(int i, int j, String val){
+        field[i][j] = val;
     }
     public abstract int[] move();
     protected int getRoundsLeft() { return this.rounds_left; }
