@@ -5,7 +5,7 @@ public class Board {
 
     public final int ROW;
     public final int COL;
-    public final int ROUNDS;
+    public int ROUNDS;
     public final boolean IS_BOT_FIRST;
 
     public Board(int r, int c, int rounds, boolean is_bot_first) {
@@ -54,6 +54,7 @@ public class Board {
         this.data[i][j] = val;
     }
 
+    public void setROUNDS(int rounds) { this.ROUNDS = rounds; }
     public void addScore(int num, Tile type) {
         if (type == Tile.PLAYER) {
             xScore += num;
